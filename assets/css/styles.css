@@ -62,6 +62,41 @@
 	top: 3px;
 }
 
+.bookit-red {
+	color: #e20045;
+}
+
+.bookit-green {
+	color: #41a41a;
+}
+
+.outsource-options,
+.roundtrip-options {
+	display: none;
+}
+#outsource-box {
+	transition: all 1s;
+}
+.roundtrip-box .roundtrip-options {
+	display: block;
+}
+.outsource-box {
+	padding: 10px;
+	background: #f0f0f0;
+	border-radius: 3px;
+}
+.outsource-box p:first-child {
+	margin-top: 0;
+}
+
+.outsource-box p:last-child {
+	margin-bottom: 0;
+}
+
+.outsource-box .outsource-options {
+	display: block;
+}
+
 #emailDetails {
 	background: #e5e5e5;
 	padding: 10px;

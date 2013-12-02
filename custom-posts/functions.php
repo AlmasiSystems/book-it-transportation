@@ -28,7 +28,8 @@ function customposts_init() {
 			'public' => $ary['show_admin_ui'],
 			'menu_position' => 5,
 			'supports' => $ary['supports'],
-			'has_archive' => $ary['enable_archives']
+			'has_archive' => $ary['enable_archives'],
+			'menu_icon' => $ary['menu_icon']
 		);
 		register_post_type( $key, $args );	
 	}

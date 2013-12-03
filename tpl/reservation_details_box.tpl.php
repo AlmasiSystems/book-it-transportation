@@ -199,7 +199,7 @@
 		</label></p>
 
 		<p><label for="contact-email">
-			<b><?php _e( 'Email', 'bookit' ); ?>:</b><br>
+			<b><?php _e( 'Contact Email', 'bookit' ); ?>:</b><br>
 			<input type="email" name="bookit_contact_email" id="contact-email" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_contact_email', true)) ?>" class="regular-text">
 		</label></p>
 	</div>

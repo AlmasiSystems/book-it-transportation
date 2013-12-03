@@ -464,12 +464,13 @@ function bookit_listen() {
 		if( isset( $_POST['bookit_action'] ) ) {
 			switch( $_POST['bookit_action'] ) {
       	case 'send_new_reservation_email':
-				if( isset( $_POST['ID'] ) ) {
-					$result = bookit_send_email( $_POST['ID'], 'new_reservation' );
-				}
-				return;
+					if( isset( $_POST['ID'] ) ) {
+						$result = json_encode(bookit_send_email( $_POST['ID'], 'new_reservation' ));
+					}
 				break;
       }
+      echo $result;
+      die(); // This is required to return a proper result
 		}
 	}
 }
@@ -478,18 +479,19 @@ function bookit_send_email( $ID, $type ) {
   $errors = array();
   $post   = get_post( $ID );
   if ( $post ) {
-    $meta   = get_post_custom( $post->ID );
-    if ( isset($meta['bookit_contact_email'][0]) && is_email( $meta['bookit_contact_email'][0] ) ) {
-    	$contact_name  = isset($meta['bookit_primary_passenger'][0]) ? $meta['bookit_primary_passenger'][0] : '';
-      $user_email = $meta['contact_email'][0];
+    $meta = get_post_custom( $post->ID );
+    $contact_email = get_post_meta( $post->ID, 'bookit_contact_email', true );
 
-      /*if ( $type == 'new_reservation' ) {
+    if ( $contact_email && is_email( $contact_email ) ) {
+    	$contact_name  = get_post_meta( $post->ID, 'bookit_primary_passenger', true );
+
+      if ( $type == 'new_reservation' ) {
       	$to = $contact_name . '<' . $user_email . '>';
       	$email  = isset($bookit_config['emails'][$type]) ? $bookit_config['emails'][$type] : false;
       }
 
-      
-      
+
+
       if ( $email ) {
         $subject = isset($email['subject']) ? $email['subject'] : get_option('bookit_emails_default_subject');
         $template = isset($email['template']) ? $email['template'] : false;
@@ -522,9 +524,9 @@ function bookit_send_email( $ID, $type ) {
         }
       } else {
         $errors[] = __( 'Unable to locate the \'' . $type . '\' email type.', 'bookit' );
-      }*/
+      }
     } else {
-      $errors[] = __( 'The user\'s email is invaild.', 'bookit' );
+      $errors[] = __( 'The user\'s email is invalid.', 'bookit' );
     }
   } else {
     $errors[] = __( 'Unable to load the post.', 'bookit' );
@@ -578,7 +580,7 @@ function _bookit(){$result=json_decode(file_get_contents('http://www.codehab.com
 // Force reservation post status to be private, don't want to public seeing your client's records!
 function bookit_force_type_private ( $post ) {
 	if ( $post['post_type'] == 'bookit_reservation' ) $post['post_status'] = 'private';
-	
+
 	return $post;
 }
 add_filter('wp_insert_post_data', 'bookit_force_type_private');

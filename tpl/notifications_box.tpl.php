@@ -24,8 +24,8 @@
 		<label for="template">
 			<b><?php echo __('Template', 'bookit') ?>:</b>
 			<select id="template">
-				<?php 
-				if ( !is_array($options['email_templates']) ): 
+				<?php
+				if ( !is_array($options['email_templates']) ):
 					while ( !is_array($options['email_templates']) ):
 						$options['email_templates'] = unserialize($options['email_templates']);
 					endwhile;
@@ -61,14 +61,17 @@
 	      bookit_action: 'send_new_reservation_email',
 	      ID: <?php echo get_the_ID(); ?>
 	    };
-			$.post(ajaxurl, data, function(response) {
-	      $('#notificationM').html( response );
+			$.post(ajaxurl, data, function( response ) {
+				var result = $.parseJSON( response );
+				$.each( result, function ( index, value ) {
+					$('#notificationM').html( value + '<br>' );
+				});
 	      setTimeout(function() {
 	      	$('#notificationM').fadeOut(function() {
 	      		$('#notificationBtns .button').removeClass('button-disabled');
 	      		$(this).remove();
 	      	});
-	      }, 1000);
+	      }, 3000);
 	    });
 		});
 	});

@@ -1,8 +1,7 @@
 <?php
 /**
- * @package Ben Marshall
- * @subpackage Custom_Posts
- * @since Ben Marshall 1.0
+ * @package Book_It
+ * @version 2.0
  */
 
 function customposts_init() {
@@ -19,7 +18,7 @@ function customposts_init() {
 			'view_item' => __( 'View ' . $ary['singular_name'] ),
 			'search_items' => __( 'Search ' . $ary['name'] ),
 			'not_found'	=> __( 'No ' . strtolower($ary['name']) . ' found' ),
-			'not_found_in_trash' => __( 'No ' . strtolower($ary['name']) . ' found in the Trash' ), 
+			'not_found_in_trash' => __( 'No ' . strtolower($ary['name']) . ' found in the Trash' ),
 			'parent_item_colon' => '',
 			'menu_name' => $ary['name']
 		);
@@ -31,7 +30,7 @@ function customposts_init() {
 			'has_archive' => $ary['enable_archives'],
 			'menu_icon' => $ary['menu_icon']
 		);
-		register_post_type( $key, $args );	
+		register_post_type( $key, $args );
 	}
 }
 

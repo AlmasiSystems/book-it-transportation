@@ -1,8 +1,7 @@
 <?php
 /**
- * @package WordPress
- * @subpackage Custom_Taxonomies
- * @since Ben Marshall 1.0
+ * @package Book_It
+ * @version 2.0
  */
 
 function customtaxonomies_init() {
@@ -15,7 +14,7 @@ function customtaxonomies_init() {
 			'all_items' => __( 'All ' . $ary['name'] ),
 			'parent_item' => __( 'Parent ' . $ary['singular_name'] ),
 			'parent_item_colon' => __( 'Parent ' . $ary['singular_name'] . ':' ),
-			'edit_item' => __( 'Edit ' . $ary['singular_name'] ), 
+			'edit_item' => __( 'Edit ' . $ary['singular_name'] ),
 			'update_item' => __( 'Update ' . $ary['singular_name'] ),
 			'add_new_item' => __( 'Add New ' . $ary['singular_name'] ),
 			'new_item_name' => __( 'New ' . $ary['singular_name'] ),

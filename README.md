@@ -10,19 +10,29 @@ To include a reservation booking form in a blog post or page, use the <code>[boo
 <h3>Features</h3>
 
 <ul>
-<li>A a complete rewrite of the plugin from the ground up.
+<li>A complete rewrite of the v1 plugin from the ground up.
 <li>New &amp; easier to follow admin reservation booking page.
 <li>Add multiple destinations to one reservation.
+<li>Send reservation emails (received, confirmed, details).
+<li>Reservations linked to registered users.
 </ul>
 
-<h3>To-Do</h3>
+<h3>To-Do Before Official v2 Release</h3>
 
 <ul>
-<li>Complete admin reservation email box functionality
-<li>Build out email template system [Premium Feature]
+<li>Build a shortcode to place a reservation submission form in post/pages
+<li>Add default Reservation Confirmed email template
+<li>Add default Reservation Details email template
+<li>Add more shortcodes for email templates
+<li>Clean up admin reservation form
+</ul>
+
+<h3>To-Do Before Official Premium Release</h3>
+<ul>
 <li>Build premium license verification system
-<li>Build a shortcode to place a reservation submission form
-<li>Build a payment module for reservations [Premium Feature]
+<li>Allow the selection of a registered user when sending emails to track email history
+<li>Build a payment module for reservations
+<li>Build out custom email template system
 </ul>
 
 <h3>Changelog</h3>
@@ -30,5 +40,4 @@ To include a reservation booking form in a blog post or page, use the <code>[boo
 <h4>Version 2.0.0</h4>
 <ul>
 <li>Pending first official release of v2.0
-<li>
 </ul>

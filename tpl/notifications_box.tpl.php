@@ -3,62 +3,48 @@
  * @package Book_It
  * @version 2.0
  */
+$options = bookit_get_options();
 ?>
 <div id="notificationOptions">
-	<div class="misc-pub-section">
-		<p><?php echo __('Send reservation emails below. Be sure to save the reservation if changes are made below sending any emails.', 'bookit') ?></p>
-	</div>
-	<p class="text-center" id="notificationBtns">
-		<a href="#" class="button" id="sendReceived"><?php echo __('Received', 'bookit') ?></a>
-		<a href="#" class="button"><?php echo __('Confirmed', 'bookit') ?></a>
-		<a href="#" class="button" id="sendDetails"><?php echo __('Email Details', 'bookit') ?></a>
-	</p>
-	<div id="emailDetails" style="display: none">
-		<label for="recipient">
-			<b><?php echo __('Send to', 'bookit') ?>:</b>
-			<input type="text" id="recipient">
-		</label>
-		<p class="description"><?php echo __('Start typing an email address or outsource company to send the reservation details to.', 'bookit') ?></p>
+	<p><label for="bookit_send_to_name">
+		<b><?php echo __('Name', 'bookit') ?>:</b>
+		<input type="text" id="bookit_send_to_name" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_primary_passenger', true)) ?>">
+	</label></p>
 
-		<?php if ( _bookit() ): $options = bookit_get_options(); ?>
-		<label for="template">
-			<b><?php echo __('Template', 'bookit') ?>:</b>
-			<select id="template">
-				<?php
-				if ( !is_array($options['email_templates']) ):
-					while ( !is_array($options['email_templates']) ):
-						$options['email_templates'] = unserialize($options['email_templates']);
-					endwhile;
-					foreach ( $options['email_templates'] as $key => $val ):
-					?>
+	<p><label for="bookit_send_to_email">
+		<b><?php echo __('Email', 'bookit') ?>:</b>
+		<input type="text" id="bookit_send_to_email" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_contact_email', true)) ?>">
+	</label></p>
+
+	<?php if ( is_array($options['email_templates']) ): ?>
+		<label for="bookit_template_id">
+			<b><?php echo __('Email Template', 'bookit') ?>:</b>
+			<select id="bookit_template_id">
+				<?php foreach ( $options['email_templates'] as $key => $val ): ?>
 					<option value="<?php echo $key ?>"><?php echo $val['name'] ?></option>
-					<? endforeach;
-				endif; ?>
+					<? endforeach; ?>
 			</select>
-			<p class="description"><?php echo __('Select a email template to use.', 'bookit') ?></p>
 		</label>
 	<?php endif; ?>
-
-		<a href="#" class="button" id="sendEmail"><?php echo __('Send') ?></a>
+	<div class="bookit-msg notice">
+		<?php echo __('Save changes before sending.', 'bookit') ?>
 	</div>
+	<a href="#" class="button" id="sendEmail"><?php echo __('Send') ?></a>
 </div>
 
 <script>
 (function($) {
 	$(function() {
-		$('#sendDetails').bind('click', function(e) {
-			e.preventDefault();
-			$('#emailDetails').slideToggle();
-		});
-
-		$('#sendReceived').bind('click', function(e) {
+		$('#sendEmail').bind('click', function(e) {
 			e.preventDefault();
 			var msg = $('<div />').attr('id', 'notificationM').addClass('updated').html('Sending, please wait&hellip;');;
-			$('#notificationBtns .button').addClass('button-disabled');
 			$('#notificationOptions').before(msg);
 
 			var data = {
-	      bookit_action: 'send_new_reservation_email',
+	      bookit_action: 'send_email',
+	      bookit_template_id: $('#bookit_template_id').val(),
+	      bookit_send_to_email: $('#bookit_send_to_email').val(),
+	      bookit_send_to_name: $('#bookit_send_to_name').val(),
 	      ID: <?php echo get_the_ID(); ?>
 	    };
 			$.post(ajaxurl, data, function( response ) {
@@ -68,7 +54,6 @@
 				});
 	      setTimeout(function() {
 	      	$('#notificationM').fadeOut(function() {
-	      		$('#notificationBtns .button').removeClass('button-disabled');
 	      		$(this).remove();
 	      	});
 	      }, 3000);

@@ -176,51 +176,8 @@ function bookit_change_enter_title_text( $text, $post ) {
 
 require_once( plugin_dir_path(__FILE__) . '/custom-posts/functions.php' );
 require_once( plugin_dir_path(__FILE__) . '/custom-taxonomies/functions.php' );
+require_once( plugin_dir_path(__FILE__) . '/helpers/shortcodes.php' );
 
-function bookit_covert_tags($string, $post_id = false) {
-	$string = str_replace(array(
-			'[[SITE_NAME]]'
-		), array(
-			get_bloginfo( 'name' )
-		), $string);
-
-	if ( $post_id ) {
-
-	} else {
-		$terms = get_the_terms( $ID, 'bookit_reservation_status', '', '', '' );
-		$term_args = array(
-			'hide_empty' => false,
-		  'orderby' => 'name',
-		  'order' => 'ASC'
-		);
-		$reservation_statuses = get_terms('bookit_reservation_status', $term_args);
-		$statuses = false;
-		if ( count($reservation_statuses) > 0 ) {
-			foreach ( $reservation_statuses as $key => $obj ) {
-				if ( !$statuses ) $statuses .= ', ';
-				$statuses .= $obj->name;
-			}
-		} else {
-			$statuses = __('No statuses available.', 'bookit') . '<a href="' . admin_url( 'edit-tags.php?taxonomy=bookit_reservation_status&post_type=bookit_reservation' ) . '">' . __('Manage Reservation Statuses', 'bookit') . '</a>';
-		}
-
-		$string = str_replace(array(
-			'[[CONTACT_NAME]]',
-			'[[CONFIRMATION_CODE]]',
-			'[[DATE_RESERVED]]',
-			'[[RESERVATION_DATE]]',
-			'[[STATUS]]'
-		), array(
-			'John Doe (Demo)',
-			'1A2B3C4D5E (Demo)',
-			date_i18n(get_option('date_format'), time()) . ' (Demo)',
-			date_i18n(get_option('date_format'), (time() + 86400)) . ' (Demo)',
-			'<em>' . $statuses . '</em>'
-		), $string);
-	}
-
-	return $string;
-}
 
 function bookit_render_email_templates() {
 	if ( _bookit() ) {
@@ -346,107 +303,7 @@ function bookit_render_code_length() {
 	<?php
 }
 
-add_action( 'admin_init', 'bookit_options_init' );
-function bookit_options_init() {
-	register_setting( 'bookit_options', 'bookit_plugin_options', 'bookit_plugin_options_validate' );
-
-	add_settings_section( 'general_settings', __('General Settings', 'bookit'), '__return_false', 'bookit_settings' );
-	add_settings_section( 'email_templates', __('Email Templates', 'bookit'), '__return_false', 'bookit_settings' );
-
-	add_settings_field( 'license', __( 'License', 'bookit' ), 'bookit_render_license', 'bookit_settings', 'general_settings' );
-	add_settings_field( 'code_length', __( 'Confirmation Code Length', 'bookit' ), 'bookit_render_code_length', 'bookit_settings', 'general_settings' );
-
-	add_settings_field( 'email_templates', __( 'Email Templates', 'bookit' ), 'bookit_render_email_templates', 'bookit_settings', 'email_templates' );
-}
-
-function bookit_plugin_options_validate( $input ) {
-
-	if ( isset($input['email_templates']) ) $input['email_templates'] = serialize($input['email_templates']);
-	if ( isset($input['license']) ) $input['license'] = htmlentities($input['license']);
-
-
-	return $input;
-}
-
-function bookit_get_options($key = false) {
-	$saved = (array) get_option( 'bookit_plugin_options' );
-	$defaults = array();
-
-	$defaults['code_length'] = 10;
-	$defaults['license'] = '';
-	$defaults['email_templates'] = array(
-		0 => array(
-			'name' => __('Default Template', 'bookit'),
-			'subject' => __('[[[SITE_NAME]]] Reservation Details', 'bookit'),
-			'html' => '<h1>Reservation Details ([[CONFIRMATION_CODE]])</h1>
-<table>
-	<tr>
-		<td><b>Date Reserved:</b></td>
-		<td>[[DATE_RESERVED]]</td>
-	</tr>
-	<tr>
-		<td><b>Reservation Date:</b></td>
-		<td>[[RESERVATION_DATE]]</td>
-	</tr>
-	<tr>
-		<td><b>Status:</b></td>
-		<td>[[STATUS]]</td>
-	</tr>
-	<tr>
-		<td><b>Contact Name:</b></td>
-		<td>[[CONTACT_NAME]]</td>
-	</tr>
-</table>
-			'
-		)
-	);
-
-	$defaults = apply_filters( 'bookit_default_theme_options', $defaults );
-
-	$options = wp_parse_args( $saved, $defaults );
-	$options = array_intersect_key( $options, $defaults );
-
-	if ( $key ) {
-		if ( $key == 'license' ) {
-			$options[$key] = html_entity_decode($options[$key]);
-		}
-
-		return $options[$key];
-	} else {
-		return $options;
-	}
-}
-
-add_action( 'admin_menu', 'bookit_plugin_options_add_page' );
-function bookit_plugin_options_add_page() {
-	add_plugins_page( __( 'Book It! Options', 'bookit' ), __( 'Book It! Options', 'bookit' ), 'edit_theme_options', 'bookit_options', 'bookit_plugin_options_render_page' );
-
-  remove_meta_box('tagsdiv-bookit_event_type', 'bookit_reservation', 'side');
-  remove_meta_box('tagsdiv-bookit_outsource_company', 'bookit_reservation', 'side');
-  remove_meta_box('tagsdiv-bookit_vehicle', 'bookit_reservation', 'side');
-  remove_meta_box('submitdiv', 'bookit_reservation', 'side');
-  remove_meta_box('commentstatusdiv', 'bookit_reservation', 'normal');
-  remove_meta_box('tagsdiv-bookit_reservation_status', 'bookit_reservation', 'side');
-  remove_meta_box('tagsdiv-bookit_company', 'bookit_reservation', 'side');
-}
-
-function bookit_plugin_options_render_page() {
-	?>
-	<div class="wrap">
-		<?php screen_icon(); ?>
-		<h2><?php echo __('Book It! Transportation Options', 'bookit'); ?></h2>
-		<?php settings_errors(); ?>
-
-		<form method="post" action="options.php">
-			<?php
-				settings_fields( 'bookit_options' );
-				do_settings_sections( 'bookit_settings' );
-				submit_button();
-			?>
-		</form>
-	</div>
-	<?php
-}
+require_once( plugin_dir_path(__FILE__) . '/helpers/options.php' );
 
 add_action( 'init', 'bookit_init' );
 function bookit_init() {
@@ -459,85 +316,8 @@ function bookit_init() {
 	bookit_listen();
 }
 
-function bookit_listen() {
-	if( $_POST ) {
-		if( isset( $_POST['bookit_action'] ) ) {
-			switch( $_POST['bookit_action'] ) {
-      	case 'send_new_reservation_email':
-					if( isset( $_POST['ID'] ) ) {
-						$result = json_encode(bookit_send_email( $_POST['ID'], 'new_reservation' ));
-					}
-				break;
-      }
-      echo $result;
-      die(); // This is required to return a proper result
-		}
-	}
-}
-
-function bookit_send_email( $ID, $type ) {
-  $errors = array();
-  $post   = get_post( $ID );
-  if ( $post ) {
-    $meta = get_post_custom( $post->ID );
-    $contact_email = get_post_meta( $post->ID, 'bookit_contact_email', true );
-
-    if ( $contact_email && is_email( $contact_email ) ) {
-    	$contact_name  = get_post_meta( $post->ID, 'bookit_primary_passenger', true );
-
-      if ( $type == 'new_reservation' ) {
-      	$to = $contact_name . '<' . $user_email . '>';
-      	$email  = isset($bookit_config['emails'][$type]) ? $bookit_config['emails'][$type] : false;
-      }
-
-
-
-      if ( $email ) {
-        $subject = isset($email['subject']) ? $email['subject'] : get_option('bookit_emails_default_subject');
-        $template = isset($email['template']) ? $email['template'] : false;
-        if ( $template ) {
-          $categories = array();
-          foreach( $bookit_config['categories'] as $key => $value ) {
-            $category = wp_get_post_terms( $post->ID, $key );
-            $categories[$key] = $category;
-          }
-          $ary = array(
-            'title' => $post->post_title
-          );
-          foreach( $bookit_config['fields'] as $key => $array ) {
-            $ary[$array['key']] = $meta[$array['key']][0];
-          }
-          foreach( $categories as $tag => $array ) {
-            foreach( $array as $k => $v ) {
-              if( isset( $ary[$tag] ))  $ary[$tag] .= ', ';
-              $ary[$tag] .= $v->name;
-            }
-          }
-          $headers[] = 'From: ' . get_bloginfo( 'admin_name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>';
-          $headers[] = 'Bcc: ' . get_bloginfo( 'admin_name' ) . ' <' . get_bloginfo( 'admin_email' ) . '>';
-          add_filter( 'wp_mail_content_type', create_function( '', 'return "text/html";' ) );
-          if ( ! wp_mail( $to, bookit_tags( $subject, $ary ), bookit_tags( $template, $ary ), $headers ) ) {
-            $errors[] = __( 'There was a problem sending the email.', 'bookit' );
-          }
-        } else {
-          $errors[] = __( 'You must first create a <a href="wp-admin/options-general.php?page=bookit">email template</a>.', 'bookit' );
-        }
-      } else {
-        $errors[] = __( 'Unable to locate the \'' . $type . '\' email type.', 'bookit' );
-      }
-    } else {
-      $errors[] = __( 'The user\'s email is invalid.', 'bookit' );
-    }
-  } else {
-    $errors[] = __( 'Unable to load the post.', 'bookit' );
-  }
-
-  if (count($errors) > 0 ) {
-    return $errors;
-  } else {
-    return 'success';
-  }
-}
+require_once( plugin_dir_path(__FILE__) . '/helpers/ajax.php' );
+require_once( plugin_dir_path(__FILE__) . '/helpers/email.php' );
 
 function bookit_randString($length=10, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
 	if(!$length) $length = 10;

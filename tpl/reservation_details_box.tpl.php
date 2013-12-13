@@ -4,18 +4,27 @@
  * @version 2.0
  */
 ?>
-<div><div class="misc-pub-section">
-	<?php if ( get_post_meta($post->ID, 'bookit_reservation_date', true) ): ?><div class="bookit-msg">
-		<p><?php echo __('Booked', 'bookit') ?> <abbr class="timeago" title="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_reservation_date', true)) ?> <?php echo esc_attr(get_post_meta($post->ID, 'bookit_pickup_time', true)) ?>"></abbr>.</p>
-	</div><?php endif; ?>
+<div class="bookit-form">
+<div>
+	<div class="misc-pub-section">
+		<?php if ( get_post_meta($post->ID, 'bookit_reservation_date', true) ): ?>
+		<div class="bookit-msg">
+			<p><?php echo __('Booked', 'bookit') ?> <abbr class="timeago" title="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_reservation_date', true)) ?> <?php echo esc_attr(get_post_meta($post->ID, 'bookit_pickup_time', true)) ?>"></abbr>.</p>
+		</div>
+		<?php endif; ?>
 
-	<div class="bookit-fourth">
-		<p><label for="reservation-date">
-			<b><?php _e( 'Reservation Date', 'bookit' ); ?>:</b><br>
-			<input type="date" name="bookit_reservation_date" id="reservation-date" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_reservation_date', true)) ?>">
-		</label> <?php if ( _bookit() ): ?><label for="is-roundtrip"><input type="checkbox" name="bookit_is_roundtrip" value="1" id="is-roundtrip" <?php if ( get_post_meta($post->ID, 'bookit_is_roundtrip', true) ): ?>checked="checked"<?php endif ?>> <b><?php echo __('Roundtrip', 'bookit') ?></b></label><?php endif ?></p>
+		<div class="bookit-fourth bookit-pr">
+			<p>
+				<label for="reservation-date">
+					<b><?php _e( 'Reservation Date', 'bookit' ); ?>:</b><br>
+					<input type="date" name="bookit_reservation_date" id="reservation-date" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_reservation_date', true)) ?>">
+				</label>
+				<label for="is-roundtrip">
+					<input type="checkbox" name="bookit_is_roundtrip" value="1" id="is-roundtrip" <?php if ( get_post_meta($post->ID, 'bookit_is_roundtrip', true) ): ?>checked="checked"<?php endif ?>> <b><?php echo __('Roundtrip', 'bookit') ?></b>
+				</label>
+			</p>
 
-		<?php if ( _bookit() ): ?>
+			<?php if ( _bookit() ): ?>
 			<div class="isRoundtrip">
 				<div class="roundtrip-options">
 					<p><label for="outsource-company">
@@ -23,36 +32,41 @@
 					</label></p>
 				</div>
 			</div>
-		<?php endif; ?>
+			<?php endif; ?>
 
-		<p><label for="reservation-status">
-			<b><?php _e( 'Reservation Status', 'bookit' ); ?>:</b><br>
-			<?php
-			$terms = get_the_terms( $ID, 'bookit_reservation_status', '', '', '' );
-		  $term_args = array(
-		    'hide_empty' => false,
-		    'orderby' => 'name',
-		    'order' => 'ASC'
-		  );
-		  $reservation_statuses = get_terms('bookit_reservation_status', $term_args);
-		  if ( count($reservation_statuses) > 0 ):
-	  		?>
-				<select name="tax_input[bookit_reservation_status][]" id="reservation-status">
-					<?php foreach ( $reservation_statuses as $key => $obj ): ?>
-						<option value="<?php echo $obj->name ?>" <?php if ($terms[0]->name === $obj->name): ?>selected="selected"<?php endif; ?>><?php echo $obj->name ?></option>
-					<?php endforeach; ?>
-				</select>
-			<?php else: ?>
-				<?php echo __('No') ?> <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=bookit_reservation_status&post_type=bookit_reservation' ) ?>"><?php echo __('reservation statuses') ?></a> <?php echo __('found.') ?>
-			<?php endif; ?></label></p>
-	</div>
-	<div class="bookit-fourth">
-		<p><label for="pickup-time">
-			<b><?php _e( 'Pickup Time', 'bookit' ); ?>:</b><br>
-			<input type="time" name="bookit_pickup_time" id="pickup-time" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_pickup_time', true)) ?>">
-		</label></p>
+			<p>
+				<label for="reservation-status">
+					<b><?php _e( 'Reservation Status', 'bookit' ); ?>:</b><br>
+					<?php
+					$terms = get_the_terms( $ID, 'bookit_reservation_status', '', '', '' );
+				  $term_args = array(
+				    'hide_empty' => false,
+				    'orderby' => 'name',
+				    'order' => 'ASC'
+				  );
+				  $reservation_statuses = get_terms('bookit_reservation_status', $term_args);
+				  if ( count($reservation_statuses) > 0 ):
+		  		?>
+					<select name="tax_input[bookit_reservation_status][]" id="reservation-status">
+						<?php foreach ( $reservation_statuses as $key => $obj ): ?>
+							<option value="<?php echo $obj->name ?>" <?php if ($terms[0]->name === $obj->name): ?>selected="selected"<?php endif; ?>><?php echo $obj->name ?></option>
+						<?php endforeach; ?>
+					</select>
+					<?php else: ?>
+					<?php echo __('No') ?> <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=bookit_reservation_status&post_type=bookit_reservation' ) ?>"><?php echo __('reservation statuses') ?></a> <?php echo __('found.') ?>
+					<?php endif; ?>
+				</label>
+			</p>
+		</div>
+		<div class="bookit-fourth bookit-pl bookit-pr">
+			<p>
+				<label for="pickup-time">
+					<b><?php _e( 'Pickup Time', 'bookit' ); ?>:</b><br>
+					<input type="time" name="bookit_pickup_time" id="pickup-time" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_pickup_time', true)) ?>">
+				</label>
+			</p>
 
-		<?php if ( _bookit() ): ?>
+			<?php if ( _bookit() ): ?>
 			<div class="isRoundtrip">
 				<div class="roundtrip-options">
 					<p><label for="outsource-company">
@@ -60,63 +74,73 @@
 					</label></p>
 				</div>
 			</div>
-		<?php endif; ?>
+			<?php endif; ?>
 
-		<p><label for="event-type">
-			<b><?php _e( 'Event Type', 'bookit' ); ?>:</b><br>
-			<?php
-			$terms = get_the_terms( $ID, 'bookit_event_type', '', '', '' );
-		  $term_args = array(
-		    'hide_empty' => false,
-		    'orderby' => 'name',
-		    'order' => 'ASC'
-		  );
-		  $event_types = get_terms('bookit_event_type', $term_args);
-		  if ( count($event_types) > 0 ):
-	  		?>
-				<select name="tax_input[bookit_event_type][]" id="event-type">
-					<?php foreach ( $event_types as $key => $obj ): ?>
-						<option value="<?php echo $obj->name ?>" <?php if ($terms[0]->name === $obj->name): ?>selected="selected"<?php endif; ?>><?php echo $obj->name ?></option>
-					<?php endforeach; ?>
-				</select>
-			<?php else: ?>
-				<?php echo __('No') ?> <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=bookit_event_type&post_type=bookit_reservation' ) ?>"><?php echo __('event types') ?></a> <?php echo __('found.') ?>
-			<?php endif; ?></label></p>
-	</div>
-	<div class="bookit-fourth">
-		<p><label for="reservation-hours">
-			<b><?php _e( 'Booked For', 'bookit' ); ?>:</b><br>
-			<input type="number" min="1" name="bookit_reservation_hours" id="reservation-hours" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_reservation_hours', true)) ?>" class="small-text" > <?php echo __('hours', 'bookit') ?>
-		</label></p>
+			<p>
+				<label for="event-type">
+					<b><?php _e( 'Event Type', 'bookit' ); ?>:</b><br>
+					<?php
+					$terms = get_the_terms( $ID, 'bookit_event_type', '', '', '' );
+				  $term_args = array(
+				    'hide_empty' => false,
+				    'orderby' => 'name',
+				    'order' => 'ASC'
+				  );
+				  $event_types = get_terms('bookit_event_type', $term_args);
+				  if ( count($event_types) > 0 ):
+			  	?>
+					<select name="tax_input[bookit_event_type][]" id="event-type">
+						<?php foreach ( $event_types as $key => $obj ): ?>
+							<option value="<?php echo $obj->name ?>" <?php if ($terms[0]->name === $obj->name): ?>selected="selected"<?php endif; ?>><?php echo $obj->name ?></option>
+						<?php endforeach; ?>
+					</select>
+					<?php else: ?>
+						<?php echo __('No') ?> <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=bookit_event_type&post_type=bookit_reservation' ) ?>"><?php echo __('event types') ?></a> <?php echo __('found.') ?>
+					<?php endif; ?>
+				</label>
+			</p>
+		</div>
+		<div class="bookit-fourth bookit-pl bookit-pr">
+			<p>
+				<label for="reservation-hours">
+					<b><?php _e( 'Booked For', 'bookit' ); ?> (<?php echo __('hours', 'bookit') ?>):</b><br>
+					<input type="number" min="1" name="bookit_reservation_hours" id="reservation-hours" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_reservation_hours', true)) ?>" class="small-text" >
+				</label>
+			</p>
 
-		<p><label for="vechicle">
-			<b><?php _e( 'Preferred Vehicle', 'bookit' ); ?>:</b><br>
-			<?php
-			$terms = get_the_terms( $ID, 'bookit_vehicle', '', '', '' );
-		  $term_args = array(
-		    'hide_empty' => false,
-		    'orderby' => 'name',
-		    'order' => 'ASC'
-		  );
-		  $vehicles = get_terms('bookit_vehicle', $term_args);
-		  if ( count($vehicles) > 0 ):
-	  		?>
-				<select name="tax_input[bookit_vehicle][]" id="event-type">
-					<?php foreach ( $vehicles as $key => $obj ): ?>
-						<option value="<?php echo $obj->name ?>" <?php if ($terms[0]->name === $obj->name): ?>selected="selected"<?php endif; ?>><?php echo $obj->name ?></option>
-					<?php endforeach; ?>
-				</select>
-			<?php else: ?>
-				<?php echo __('No') ?> <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=bookit_vehicle&post_type=bookit_reservation' ) ?>"><?php echo __('vehicles') ?></a> <?php echo __('found.') ?>
-			<?php endif; ?></label></p>
-	</div>
-	<div class="bookit-fourth">
-		<p><label for="reservation-num-passengers">
-			<b><?php _e( 'Number of Passengers', 'bookit' ); ?>:</b><br>
-			<input type="number" min="1" name="bookit_num_passengers" id="reservation-num-passengers" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_num_passengers', true)) ?>" class="small-text" >
-		</label></p>
+			<p>
+				<label for="vechicle">
+					<b><?php _e( 'Preferred Vehicle', 'bookit' ); ?>:</b><br>
+					<?php
+					$terms = get_the_terms( $ID, 'bookit_vehicle', '', '', '' );
+				  $term_args = array(
+				    'hide_empty' => false,
+				    'orderby' => 'name',
+				    'order' => 'ASC'
+				  );
+				  $vehicles = get_terms('bookit_vehicle', $term_args);
+				  if ( count($vehicles) > 0 ):
+			  	?>
+					<select name="tax_input[bookit_vehicle][]" id="event-type">
+						<?php foreach ( $vehicles as $key => $obj ): ?>
+							<option value="<?php echo $obj->name ?>" <?php if ($terms[0]->name === $obj->name): ?>selected="selected"<?php endif; ?>><?php echo $obj->name ?></option>
+						<?php endforeach; ?>
+					</select>
+					<?php else: ?>
+						<?php echo __('No') ?> <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=bookit_vehicle&post_type=bookit_reservation' ) ?>"><?php echo __('vehicles') ?></a> <?php echo __('found.') ?>
+					<?php endif; ?>
+				</label>
+			</p>
+		</div>
+		<div class="bookit-fourth bookit-pl">
+			<p>
+				<label for="reservation-num-passengers">
+					<b><?php _e( '# of Passengers', 'bookit' ); ?>:</b><br>
+					<input type="number" min="1" name="bookit_num_passengers" id="reservation-num-passengers" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_num_passengers', true)) ?>" class="small-text" >
+				</label>
+			</p>
 
-		<?php if ( _bookit() ): ?>
+			<?php if ( _bookit() ): ?>
 			<div id="outsourceBox">
 				<p><label for="is-outsourced">
 					<input type="checkbox" name="bookit_is_outsourced" value="1" id="is-outsourced" <?php if ( get_post_meta($post->ID, 'bookit_is_outsourced', true) ): ?>checked="checked"<?php endif ?>> <b><?php echo __('Outsourced Reservation', 'bookit') ?></b>
@@ -150,7 +174,7 @@
 </div>
 
 <div class="misc-pub-section">
-	<div class="bookit-half">
+	<div class="bookit-half bookit-pr">
 		<div class="bookit-half">
 			<p><label for="post_author_override">
 				<b><?php _e( 'User', 'bookit' ); ?>:</b><br>
@@ -192,7 +216,7 @@
 			<input type="tel" name="bookit_contact_phone" id="contact-phone" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_contact_phone', true)) ?>" class="regular-text">
 		</label></p>
 	</div>
-	<div class="bookit-half">
+	<div class="bookit-half bookit-pl">
 		<p><label for="primary-passenger">
 			<b><?php _e( 'Primary Passenger Name', 'bookit' ); ?>:</b><br>
 			<input type="text" name="bookit_primary_passenger" id="primary-passenger" value="<?php echo esc_attr(get_post_meta($post->ID, 'bookit_primary_passenger', true)) ?>" class="regular-text">
@@ -240,6 +264,7 @@
 		</div>
 	</div>
 	<div class="clear"></div>
+</div>
 </div>
 
 

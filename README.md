@@ -20,7 +20,7 @@ To include a reservation booking form in a blog post or page, use the <code>[boo
 <h3>To-Do Before Official v2 Release</h3>
 
 <ul>
-<li>Build a shortcode to place a reservation submission form in post/pages
+<li>Build a reservation form template
 <li>Add default Reservation Confirmed email template
 <li>Add default Reservation Details email template
 <li>Add more shortcodes for email templates
@@ -33,6 +33,7 @@ To include a reservation booking form in a blog post or page, use the <code>[boo
 <li>Allow the selection of a registered user when sending emails to track email history
 <li>Build a payment module for reservations
 <li>Build out custom email template system
+<li>Allow outsourcing of reservations
 </ul>
 
 <h3>Changelog</h3>

@@ -13,6 +13,8 @@ Author URI: http://www.benmarshall.me
  * @version 2.0
  */
 
+define("BOOKIT_ROOT", plugin_dir_path(__FILE__));
+
 // Setup Custom Posts
 $custom_posts = array();
 
@@ -142,12 +144,19 @@ function bookit_set_title() {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 }
 
-add_action( 'admin_enqueue_scripts', 'bookit_scripts' );
-function bookit_scripts() {
+// Admin Scripts
+add_action( 'admin_enqueue_scripts', 'bookit_admin_scripts' );
+function bookit_admin_scripts() {
  	wp_enqueue_style( 'fontawesome', '//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css' );
-  wp_enqueue_style( 'bookit', plugins_url('assets/css/styles.css', __FILE__));
+  wp_enqueue_style( 'bookit', plugins_url('assets/css/admin-styles.css', __FILE__));
 
   wp_enqueue_script('timeago', plugins_url('assets/js/jquery.timeago.js', __FILE__), array('jquery'));
+}
+
+// Frontend Scripts
+add_action( 'wp_enqueue_scripts', 'bookit_scripts' );
+function bookit_scripts() {
+  wp_enqueue_style( 'bookit', plugins_url('assets/css/styles.css', __FILE__));
 }
 
 add_filter( 'gettext', 'bookit_gettext', 10, 2 );

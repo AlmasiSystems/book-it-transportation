@@ -4,6 +4,7 @@
  * @version 2.0
  */
 
+// Shortcode replacements
 function bookit_shortcodes($string, $post_id = false) {
   $options = bookit_get_options();
 
@@ -40,3 +41,13 @@ function bookit_shortcodes($string, $post_id = false) {
 
   return $string;
 }
+
+// Book It! Shortcodes
+function bookit_shortcode_reservation_form( $atts ){
+  ob_start();
+  require_once( BOOKIT_ROOT . '/tpl/reservation_form.tpl.php' );
+  $form = ob_get_contents();
+  ob_end_clean();
+  return $form;
+}
+add_shortcode( 'bookit_reservation_form', 'bookit_shortcode_reservation_form' );

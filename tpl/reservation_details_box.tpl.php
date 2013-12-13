@@ -5,7 +5,6 @@
  */
 ?>
 <div class="bookit-form">
-<div>
 	<div class="misc-pub-section">
 		<?php if ( get_post_meta($post->ID, 'bookit_reservation_date', true) ): ?>
 		<div class="bookit-msg">
@@ -264,7 +263,6 @@
 		</div>
 	</div>
 	<div class="clear"></div>
-</div>
 </div>
 
 

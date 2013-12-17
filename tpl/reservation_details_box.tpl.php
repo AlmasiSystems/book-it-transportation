@@ -249,7 +249,7 @@
 				<?php if ( count($destinations) > 0 ): foreach ( $destinations as $key => $loc ): ?>
 					<div class="bookit-destination misc-pub-section">
 						<label for="destination-<?php echo $key ?>">
-						<span class="num"><?php echo ($key + 1) ?></span> <input type="text" name="bookit_destination[<?php echo $key ?>]" id="destination-<?php echo $key ?>" value="<?php echo esc_attr($destinations[$key]) ?>" class="regular-text"></label>
+						<span class="num"><?php echo ($key + 1) ?></span> <input type="text" name="bookit_destination[<?php echo $key ?>]" id="destination-<?php echo $key ?>" value="<?php echo esc_attr($destinations[$key]) ?>" class="regular-text bookit-input-destination"></label>
 						<a href="#" data-location="<?php echo esc_attr($destinations[$key]) ?>" class="changeMap"><i class="icon-map-marker bookit-link-icon"></i></a>
 					</div>
 				<?php endforeach; else: ?>

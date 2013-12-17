@@ -135,3 +135,7 @@
 .bookit-form input[type="number"] {
 	width: 100%;
 }
+
+.bookit-input-destination {
+	width: 85% !important;
+}

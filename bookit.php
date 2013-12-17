@@ -156,6 +156,12 @@ function bookit_admin_scripts() {
 // Frontend Scripts
 add_action( 'wp_enqueue_scripts', 'bookit_scripts' );
 function bookit_scripts() {
+	$options = bookit_get_options();
+
+	if(isset($options['form_css']) && $options['form_css']) {
+		wp_enqueue_style( 'bookit', plugins_url('assets/css/templates/'.$options['form_css'].'.css', __FILE__));
+	}
+
   wp_enqueue_style( 'bookit', plugins_url('assets/css/styles.css', __FILE__));
 }
 
@@ -292,25 +298,6 @@ function bookit_render_email_templates() {
 	</script>
 	<?php
 }}
-
-function bookit_render_license() {
-	$options = bookit_get_options();
-	?>
-	<label for="license">
-			<input type="text" name="bookit_plugin_options[license]" id="license" value="<?php echo bookit_get_options('license'); ?>" class="regular-text" > <?php if ( _bookit() ): ?><span class="bookit-green"><b><i class="icon-thumbs-up bookit-link-icon"></i> <?php echo __('Thanks for choosing Book It! to manage your reservations!', 'bookit') ?></b></span><?php else: ?><span class="bookit-red"><b><i class="icon-thumbs-down bookit-link-icon"></i> <?php echo __('Invalid license.', 'bookit') ?></b></span><?php endif; ?>
-		</label>
-		<p class="description"><?php echo __('If you\'ve purchased the premium version of Book It!, enter your license key here.', 'bookit') ?></p>
-	<?php
-}
-
-function bookit_render_code_length() {
-	$options = bookit_get_options();
-	?>
-	<p><label for="code-length">
-			<input type="number" min="5" name="bookit_plugin_options[code_length]" id="code-length" value="<?php if( $options['code_length'] ): echo esc_attr($options['code_length']); else: echo 10; endif; ?>" class="small-text" > <?php echo __('characters') ?>
-		</label></p>
-	<?php
-}
 
 require_once( plugin_dir_path(__FILE__) . '/helpers/options.php' );
 

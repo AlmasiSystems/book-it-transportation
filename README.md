@@ -14,17 +14,20 @@ To include a reservation booking form in a blog post or page, use the <code>[boo
 <li>New &amp; easier to follow admin reservation booking page.
 <li>Add multiple destinations to one reservation.
 <li>Send reservation emails (received, confirmed, details).
-<li>Reservations linked to registered users.
+<li>Reservations can be linked to registered users.
+<li>Integration with Google Maps.
+<li>Settings page for easy configuration.
 </ul>
 
 <h3>To-Do Before Official v2 Release</h3>
 
 <ul>
-<li>Build a reservation form template
+<li>Build a reservation form shortcode
 <li>Add default Reservation Confirmed email template
 <li>Add default Reservation Details email template
 <li>Add more shortcodes for email templates
 <li>Clean up admin reservation form
+<li>Convert admin reservation form to use the front-end form
 </ul>
 
 <h3>To-Do Before Official Premium Release</h3>
@@ -34,6 +37,8 @@ To include a reservation booking form in a blog post or page, use the <code>[boo
 <li>Build a payment module for reservations
 <li>Build out custom email template system
 <li>Allow outsourcing of reservations
+<li>Add additional CSS reservation form templates
+<li>Add text message notifications
 </ul>
 
 <h3>Changelog</h3>
